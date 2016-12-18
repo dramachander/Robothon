@@ -1,7 +1,7 @@
 #define trigpin 8
 #define echopin 13
 unsigned long startTime;
-int turnInd = 0;
+int turnInd = 0; // (0:Right Turn, 1:Left Turn)
 const int rtAngleTime = 840;
 const int leftWheelAdjustment = 100;
 
@@ -26,13 +26,32 @@ void loop() {
 
     if (getObstacleDistance() > 20){
       goStraight();
-      delay(3000);
-      turnRightU();
-      goStraight();
-      delay(3000);
-      turnLeftU();
+    }
+    else {
+      turn();
     }
 
+}
+
+void turn(){
+
+  if (turnInd == 0){
+    turnRightU();
+    turnInd = 1;
+  }
+  else{
+    turnLeftU();
+    turnInd = 0;
+  }
+  
+}
+
+void agriMode(){
+  
+}
+
+void crazyMode(){
+  
 }
 
 
