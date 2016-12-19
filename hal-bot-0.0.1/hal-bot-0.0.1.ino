@@ -1,5 +1,5 @@
-#define trigpin 8
-#define echopin 13
+#define trigpin 2
+#define echopin 3
 unsigned long startTime;
 int turnInd = 0; // (0:Right Turn, 1:Left Turn)
 const int rtAngleTime = 840;
@@ -37,11 +37,11 @@ void turn(){
 
   if (turnInd == 0){
     turnRightU();
-    turnInd = 1;
+    //turnInd = 1;
   }
   else{
     turnLeftU();
-    turnInd = 0;
+    //turnInd = 0;
   }
   
 }
@@ -118,7 +118,7 @@ void turnLeft()
 }
 
 void turnRightU(){
-    Serial.println("Taking Right U Trun...");
+    Serial.println("Taking Right U Turn...");
     startTime = millis();
     while((millis() - startTime) < rtAngleTime){
       turnRight();
@@ -146,7 +146,7 @@ void turnRightU(){
 }
 
 void turnLeftU(){
-    Serial.println("Taking Left U Trun...");
+    Serial.println("Taking Left U Turn...");
     startTime = millis();
     while((millis() - startTime) < (rtAngleTime+leftWheelAdjustment)){
       turnLeft();
@@ -174,13 +174,21 @@ void turnLeftU(){
 }
 
 int getObstacleDistance(){
-    int duration, distance;
-    digitalWrite(trigpin, HIGH);
-    delay(100);
+    int duration,distance;
     digitalWrite(trigpin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trigpin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigpin, LOW);
+    
     duration = pulseIn(echopin, HIGH);
-    distance = (duration / 2) / 29.1;
-    //Serial.println("Onstacle distance : "+ distance);
-    return duration;
+    distance = microsecondsToCentimeters(duration);
+    //return duration;
+    return distance;
+}
+
+long microsecondsToCentimeters(long microseconds)
+{
+  return microseconds / 29 / 2;
 }
 
