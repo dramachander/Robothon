@@ -1,9 +1,10 @@
 #define trigpin 2
 #define echopin 3
+unsigned int obstacleDistance = 15;
 unsigned long startTime;
 int turnInd = 0; // (0:Right Turn, 1:Left Turn)
-const int rtAngleTime = 840;
-const int leftWheelAdjustment = 100;
+const int rtAngleTime = 580;
+const int leftWheelAdjustment = 40;
 
 
 void setup() {
@@ -22,9 +23,9 @@ void loop() {
   
     //Serial.println(millis() - startTime ); 
 
-    Serial.println(getObstacleDistance());
+    //Serial.println(getObstacleDistance());
 
-    if (getObstacleDistance() > 20){
+    if (getObstacleDistance() > obstacleDistance){
       goStraight();
     }
     else {
@@ -37,11 +38,9 @@ void turn(){
 
   if (turnInd == 0){
     turnRightU();
-    //turnInd = 1;
   }
   else{
     turnLeftU();
-    //turnInd = 0;
   }
   
 }
@@ -68,12 +67,10 @@ void pause(){
 
 void goStraight()
 {
-   Serial.println("Going Straight...");  
-  //Serial.print("Straight:Left Motor\n");  
+  Serial.println("Going Straight...");  
   digitalWrite(9, LOW);
   digitalWrite(10, HIGH);
   
-  //Serial.print("Straight:Right Motor\n");  
   digitalWrite(11, LOW);
   digitalWrite(12, HIGH);
 }
@@ -81,11 +78,9 @@ void goStraight()
 void goReverse()
 {
   Serial.println("Going Reverse...");
-  //Serial.print("Reverse:Left Motor\n");  
   digitalWrite(9, HIGH);
   digitalWrite(10, LOW);
   
-  //Serial.print("Reverse:Right Motor\n");  
   digitalWrite(11, HIGH);
   digitalWrite(12, LOW);
 
@@ -94,11 +89,10 @@ void goReverse()
 
 void turnRight()
 {
-  //Serial.print("Left Motor\n");  
+  
   digitalWrite(9, LOW);
   digitalWrite(10, HIGH);
   
-  //Serial.print("Right Motor\n");  
   digitalWrite(11, LOW);
   digitalWrite(12, LOW);
 
@@ -107,11 +101,10 @@ void turnRight()
 
 void turnLeft()
 {
-  //Serial.print("Left Motor\n");  
+  
   digitalWrite(9, LOW);
   digitalWrite(10, LOW);
   
-  //Serial.print("Right Motor\n");  
   digitalWrite(11, LOW);
   digitalWrite(12, HIGH);
 
@@ -131,18 +124,17 @@ void turnRightU(){
      * 
      *******/
     
-    startTime =  millis();
+    /*startTime =  millis();
     while((millis() - startTime) < 100){
       goStraight();
     }
-    pause();
+    pause();*/
     startTime =  millis();
     while((millis() - startTime) < rtAngleTime){
       turnRight();
     }
-    pause();
     turnInd = 1;
-    
+    Serial.println("Taking Right U Turn complete...");
 }
 
 void turnLeftU(){
@@ -159,18 +151,17 @@ void turnLeftU(){
      * 
      *******/
     
-    startTime =  millis();
+    /*startTime =  millis();
     while((millis() - startTime) < 100){
       goStraight();
     }
-    pause();
+    pause();*/
     startTime =  millis();
     while((millis() - startTime) < (rtAngleTime+leftWheelAdjustment)){
       turnLeft();
     }
-    pause();
     turnInd = 0;
-    
+    Serial.println("Taking Left U Turn complete...");
 }
 
 int getObstacleDistance(){
